@@ -11,7 +11,6 @@
     <version>1.0</version>
 
     <properties>
-        <project></project>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -83,7 +82,8 @@
                         <option>-dontwarn</option>
                     </options>
                     <libs>
-                        <lib>${java.home}/jmods/java.base.jmod</lib>
+						<lib>${java.home}/lib/rt.jar</lib>.
+                        <!--lib>${java.home}/jmods/java.base.jmod</lib-->
                         <!--lib>C:\Users\2die4\.m2\repository\com\google\guava\guava\25.0-jre\guava-25.0-jre.jar</lib-->
                     </libs>
                 </configuration>
