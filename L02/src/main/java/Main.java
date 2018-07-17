@@ -1,5 +1,6 @@
 import java.lang.System;
 import java.util.function.Supplier;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -9,43 +10,67 @@ public class Main
 {
     public static void main(String... args) throws InterruptedException
     {
+        calcM("char[0]", () -> new char[0], 1000000);
+        calcM("String(\"\")", () -> new String(""));
+        calcM("String(new char[0])", () -> new String(new char[0]));
+        calcM("FooEmpty()", () -> new FooEmpty());
+        calcM("Foo2Shorts()", () -> new Foo2Shorts());
+        calcM("Foo4Shorts()", () -> new Foo4Shorts());
+        calcM("Foo5Shorts()", () -> new Foo5Shorts());
+        calcM("Foo2Ints()", () -> new Foo2Ints());
+        calcM("Foo3Ints()", () -> new Foo3Ints());
+        calcM("Integer(0)", () -> new Integer(0));
 
-//        calcM(() -> new char[0]); // 24
-//        calcM(() -> new String("")); // 32
-//        calcM(() -> new String(new char[0])); // 56
-//        calcM(() -> new FooEmpty()); // 16
-//        calcM(() -> new Foo2Shorts()); // 24
-//        calcM(() -> new Foo4Shorts()); // 24
-//        calcM(() -> new Foo5Shorts()); // 32
-//        calcM(() -> new Foo2Ints()); // 24
-//        calcM(() -> new Foo3Ints()); // 32
-//        calcM(() -> new ArrayList<>()); // 40
-//        calcM(() -> new Integer(0)); // 24
-//        int arr[] = {0, 0, 0, 0, 0};
-//        calcM(() -> Arrays.asList(arr)); // 64
-//        int arr2[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-//        calcM(() -> Arrays.asList(arr2)); // 64
-//        calcM(() -> Arrays.asList(new FooEmpty())); // 80
-//        calcM(() -> Arrays.asList(new FooEmpty(),
-//                new FooEmpty(),
-//                new FooEmpty(),
-//                new FooEmpty(),
-//                new FooEmpty())); // 176
-//        calcM(() -> new HashSet<>()); // 80
-//        calcM(() -> new HashMap<>()); // 64
-//        HashMap<Integer, FooEmpty> m = new HashMap<>();
-//        m.put(1, new FooEmpty());
-//        calcM(() -> new HashMap<>(m)); // 152
+        {
+            int[] arr10 = new int[10];
+            calcM("int arr[10]", () -> Arrays.asList(Arrays.copyOf(arr10, 10)));
+        }
+        {
+            int arr100[] = new int[100];
+            calcM("int arr[100]", () -> Arrays.asList(Arrays.copyOf(arr100, 100)));
+        }
+        {
+            int arr1000[] = new int[1000];
+            calcM("int arr[1000]", () -> Arrays.asList(Arrays.copyOf(arr1000, 1000)));
+        }
 
-        HashMap<Integer, FooEmpty> m1 = new HashMap<>();
-        for (int i = 0; i < 5; ++i)
-            m1.put(i, new FooEmpty());
-        calcM(() -> new HashMap<>(m1)); // 392
+        calcM("ArrayList<>()", () -> new ArrayList<>());
+        for (int i = 0; i < 4; ++i)
+        {
+            long sz = Math.round(Math.pow(10, i));
+            calcM("ArrayList " + sz, () -> createList(sz)); // 80
+        }
+
+        for (int i = 0; i < 4; ++i)
+        {
+            long sz = Math.round(Math.pow(10, i));
+            calcM("HashMap " + sz, () -> createMap(sz));
+        }
     }
 
-    private static void calcM(Supplier supplier) throws InterruptedException
+    private static HashMap<Integer, FooEmpty> createMap(long sz)
     {
-        System.out.println("Element size: " +  MemoryCalc.calcMemory(supplier));
+        HashMap<Integer, FooEmpty> m = new HashMap<>();
+        for (int j = 0; j < sz; ++j)
+        {
+            m.put(j, new FooEmpty());
+        }
+        return m;
+    }
+    private static List<FooEmpty> createList(long sz)
+    {
+        List<FooEmpty> arr = new ArrayList<>();
+        for (long j = 0; j < sz; ++j)
+            arr.add(new FooEmpty());
+        return arr;
+    }
+    private static void calcM(String text, Supplier supplier) throws InterruptedException
+    {
+        System.out.println(text + ": " +  MemoryCalc.calcMemory(supplier));
+    }
+    private static void calcM(String text, Supplier supplier, int size) throws InterruptedException
+    {
+        System.out.println(text + ": " +  MemoryCalc.calcMemory(supplier, size));
     }
 
     private static class FooEmpty

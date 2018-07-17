@@ -3,21 +3,26 @@ import java.lang.Math;
 
 public class MemoryCalc
 {
-    final static int SIZE = 1000000;
+    final static int SIZE = 10000;
 
     public static long calcMemory(Supplier supplier) throws InterruptedException
     {
-        Object[] array = new Object[SIZE];
+        return calcMemory(supplier, SIZE);
+    }
+
+    public static long calcMemory(Supplier supplier, int size) throws InterruptedException
+    {
+        Object[] array = new Object[size];
 
         long memStart = getMem();
-        for (int i = 0; i < SIZE; i++)
+        for (int i = 0; i < size; i++)
         {
             array[i] = supplier.get();
         }
         long memEnd = getMem();
         array = null;
         Thread.sleep(1000);
-        return Math.round((double)(memEnd - memStart) / (double)(SIZE));
+        return Math.round((double)(memEnd - memStart) / (double)(size));
     }
 
     private static long getMem() throws InterruptedException
