@@ -3,7 +3,7 @@ import java.lang.Math;
 
 public class MemoryCalc
 {
-    final static int SIZE = 10000;
+    final static int SIZE = 100000;
 
     public static long calcMemory(Supplier supplier) throws InterruptedException
     {
@@ -20,9 +20,8 @@ public class MemoryCalc
             array[i] = supplier.get();
         }
         long memEnd = getMem();
-        array = null;
         Thread.sleep(1000);
-        return Math.round((double)(memEnd - memStart) / (double)(size));
+        return Math.round((double)(memEnd - memStart) / (double)(array.length));
     }
 
     private static long getMem() throws InterruptedException
