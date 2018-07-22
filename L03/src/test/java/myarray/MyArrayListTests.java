@@ -1,4 +1,4 @@
-package myarray.tests;
+package myarray;
 
 import static org.junit.Assert.*;
 
