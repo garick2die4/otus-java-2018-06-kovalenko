@@ -13,3 +13,6 @@
 **/build/
 **/gradle/
 **/.gradle/
+
+**/.settings
+**/.project
