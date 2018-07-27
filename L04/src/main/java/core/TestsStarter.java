@@ -1,4 +1,4 @@
-package app;
+package core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,16 +9,18 @@ import annot.After;
 import annot.Before;
 import annot.Test;
 
-public class TestsLoader
+public class TestsStarter
 {
-	void runTests(String className)
+	public TestResults runTestsForClass(String className)
 	{
 		Object testObj = null;
 		Method beforeMethod = null;
 		Method afterMethod = null;
 		List<Method> testMethods = new ArrayList<>();
 		
-		ClassLoader loader = TestsLoader.class.getClassLoader();
+		TestResults results = new TestResults();
+		
+		ClassLoader loader = TestsStarter.class.getClassLoader();
 		try
 		{
 			Class<?> testClass = loader.loadClass(className);
@@ -42,26 +44,13 @@ public class TestsLoader
 				}
 			}
 		}
-		catch (ClassNotFoundException e)
+		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			results.add(className, TestResultType.ERROR, e.getMessage());
 		}
-		catch (InstantiationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IllegalAccessException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IllegalArgumentException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		if (!results.isEmpty())
+			return results;
 		
 		if (beforeMethod != null)
 		{
@@ -71,33 +60,35 @@ public class TestsLoader
 			}
 			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				results.add(beforeMethod.getName(), TestResultType.ERROR, e.getMessage());
 			}
 		}
 
+		if (!results.isEmpty())
+			return results;
+		
 		for (Method testMethod : testMethods)
 		{
 			try
 			{
 				testMethod.invoke(testObj);
 				
-				System.out.format("Test %s OK\n", testMethod.getName());
+				results.add(testMethod.getName(), TestResultType.OK);
 			}
 			catch (IllegalAccessException | IllegalArgumentException e)
 			{
-				e.printStackTrace();
+				results.add(testMethod.getName(), TestResultType.ERROR, e.getMessage());
 			}
 			catch (InvocationTargetException e)
 			{
 				if (e.getTargetException() instanceof AssertionError)
 				{
-					AssertionError err = (AssertionError)e.getTargetException(); 
-					System.out.format("Test %s failed with error: %s\n", testMethod.getName(), err.getMessage());
+					AssertionError err = (AssertionError)e.getTargetException();
+					results.add(testMethod.getName(), TestResultType.FAILED, err.getMessage());
 				}
 				else
 				{
-					e.printStackTrace();
+					results.add(testMethod.getName(), TestResultType.ERROR, e.getMessage());
 				}
 			}
 
@@ -105,13 +96,16 @@ public class TestsLoader
 		
 		if (afterMethod != null)
 		{
-			try {
+			try
+			{
 				afterMethod.invoke(testObj);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			}
+			catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+			{
+				results.add(afterMethod.getName(), TestResultType.ERROR, e.getMessage());
 			}
 		}
 
+		return results;
 	}
 }
