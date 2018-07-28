@@ -6,28 +6,29 @@ import core.TestResult;
 import core.TestResultType;
 import core.TestResults;
 import core.TestsStarter;
+import tests.SomeTest;
+import tests.SomeTest2;
 
 public class Main
 {
     public static void main(String... args) throws InterruptedException
     {
-    	runTests("tests.SomeTest");
-    	
-    	runTests("tests.SomeTest2");
+    	runTests(SomeTest.class);
+    	runTests(SomeTest2.class);
     }
     
-    private static void runTests(String className) 
+    private static void runTests(Class<?> testClass) 
     {
-    	System.out.println(className);
+    	System.out.println("Run test " + testClass.getName());
     	
-    	TestsStarter loader = new TestsStarter();
-    	printResults(className, loader.runTestsForClass(className));
+    	printResults(testClass.getName(), TestsStarter.run(testClass));
     	
     	System.out.println("-------------------------");
     }
     
     private static void printResults(String testName, TestResults results)
     {
+    	System.out.println("Results:");
     	for (TestResult res : results.results())
     	{
     		if (res.type().equals(TestResultType.OK))
@@ -37,7 +38,7 @@ public class Main
     		else
     		{
     			
-    			System.out.format("test '%s', result: %s, message: %n\n", res.name(), getResultTypeAsString(res.type()), res.message());
+    			System.out.format("test '%s', result: %s, message: %s\n", res.name(), getResultTypeAsString(res.type()), res.message());
     		}
     	}
     }
