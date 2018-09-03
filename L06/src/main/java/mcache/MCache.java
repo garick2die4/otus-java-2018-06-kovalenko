@@ -60,7 +60,7 @@ public class MCache<K, V> implements IMCache<K, V>
 	public V get(K key)
 	{
 		MCacheElement<K, SoftReference<V>> element = elements.get(key);
-        if (element != null)
+        if (element != null && element.getValue().get() != null)
         {
             hit++;
             element.setAccessed();
