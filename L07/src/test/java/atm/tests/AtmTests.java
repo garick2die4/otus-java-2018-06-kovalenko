@@ -8,9 +8,9 @@ import org.junit.Test;
 import atm.core.Banknote;
 import atm.core.IAtm;
 import atm.core.IAtmBox;
-import atm.core.NoSuchBoxExists;
-import atm.core.UnsufficientBanknoteCount;
-import atm.core.UnsufficientMoney;
+import atm.core.NoSuchBoxExistsException;
+import atm.core.UnsufficientBanknoteCountException;
+import atm.core.UnsufficientMoneyException;
 import atm.impl.AtmBox;
 import atm.impl.AtmFactory;
 
@@ -81,7 +81,7 @@ public class AtmTests
 			box.get(10);
 			Assert.fail("Expected UnsufficientBanknoteCount to be thrown");
 		}
-		catch(UnsufficientBanknoteCount e)
+		catch(UnsufficientBanknoteCountException e)
 		{
 		}
 		
@@ -144,7 +144,7 @@ public class AtmTests
 			atm.putMoney(Banknote.HUNDRED, 1);
 			Assert.fail("Expected NoSuchBoxExists to be thrown");
 		}
-		catch(NoSuchBoxExists e)
+		catch(NoSuchBoxExistsException e)
 		{
 		}
 
@@ -213,11 +213,12 @@ public class AtmTests
 		atm.putMoney(Banknote.FIVE, 2);
 
 		// Act
-		Map<Banknote, Integer> money1 = atm.getMoney(15);
+		Map<Banknote, Integer> money = atm.getMoney(15);
 
 		// Assert
-		Assert.assertEquals(1, money1.size());
-		Assert.assertEquals(15, (int)money1.get(Banknote.ONE));
+		Assert.assertEquals(2, money.size());
+		Assert.assertEquals(5, (int)money.get(Banknote.ONE));
+		Assert.assertEquals(2, (int)money.get(Banknote.FIVE));
 	}
 	
 	/**
@@ -270,7 +271,7 @@ public class AtmTests
 			atm.getMoney(50);
 			Assert.fail("Expected UnsufficientMoney to be thrown");
 		}
-		catch(UnsufficientMoney e)
+		catch(UnsufficientMoneyException e)
 		{
 		}
 

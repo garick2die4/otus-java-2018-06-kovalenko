@@ -7,9 +7,9 @@ import java.util.Map;
 import atm.core.Banknote;
 import atm.core.IAtm;
 import atm.core.IAtmBox;
-import atm.core.NoSuchBoxExists;
-import atm.core.UnsufficientBanknoteCount;
-import atm.core.UnsufficientMoney;
+import atm.core.NoSuchBoxExistsException;
+import atm.core.UnsufficientBanknoteCountException;
+import atm.core.UnsufficientMoneyException;
 
 public final class Atm implements IAtm
 {
@@ -24,20 +24,20 @@ public final class Atm implements IAtm
 	}
 	
 	@Override
-	public void putMoney(Banknote banknote, int count) throws NoSuchBoxExists
+	public void putMoney(Banknote banknote, int count) throws NoSuchBoxExistsException
 	{
 		if (!boxes.containsKey(banknote))
-			throw new NoSuchBoxExists();
+			throw new NoSuchBoxExistsException(banknote);
 
 		IAtmBox box = boxes.get(banknote);
 		box.add(count);
 	}
 
 	@Override
-	public Map<Banknote, Integer> getMoney(int sum) throws UnsufficientMoney
+	public Map<Banknote, Integer> getMoney(int sum) throws UnsufficientMoneyException
 	{
 		if (sum > totalBalance())
-			throw new UnsufficientMoney();
+			throw new UnsufficientMoneyException(this);
 
 		Map<Banknote, Integer> result = new HashMap<>();
 		
@@ -46,8 +46,7 @@ public final class Atm implements IAtm
 		{
 			Banknote banknote = banknotes[i];
 			
-			// нет таких ячеек вообще
-			if (!boxes.containsKey(banknote))
+			if (!hasBoxWithBanknotes(banknote))
 				continue;
 			
 			int c = Math.round(sum / banknote.nominal());
@@ -56,9 +55,9 @@ public final class Atm implements IAtm
 			
 			IAtmBox box = boxes.get(banknote);
 			
-			// не хватает банкнот, пропускаем ячейку и пробуем другого номинала
+			// не хватает банкнот, берем сколько есть
 			if (box.banknoteCount() < c)
-				continue;
+				c = box.banknoteCount();
 
 			result.put(banknote, c);
 			
@@ -69,7 +68,7 @@ public final class Atm implements IAtm
 		
 		// не вся сумма выдана
 		if (sum != 0)
-			throw new UnsufficientMoney();
+			throw new UnsufficientMoneyException(this);
 
 		// если хватило денег, реально списываем сумму 
 		for (Map.Entry<Banknote, Integer> m : result.entrySet())
@@ -79,7 +78,7 @@ public final class Atm implements IAtm
 			{
 				box.get(m.getValue());
 			}
-			catch (UnsufficientBanknoteCount e)
+			catch (UnsufficientBanknoteCountException e)
 			{
 				throw new IllegalStateException();
 			}
@@ -99,6 +98,11 @@ public final class Atm implements IAtm
 		return balance;
 	}
 
+	private boolean hasBoxWithBanknotes(Banknote banknote)
+	{
+		return boxes.containsKey(banknote) && boxes.get(banknote).banknoteCount() > 0;
+	}
+	
 	private int totalBalance()
 	{
 		Map<Banknote, Integer> banknotesBalance = getBalance();

@@ -5,6 +5,7 @@ import java.util.Map;
 /**
  * Банкомат 
  */
+// TODO add ID
 public interface IAtm
 {
 	/**
@@ -12,18 +13,18 @@ public interface IAtm
 	 * 
 	 * @param banknote Какая банкнота
 	 * @param count Количество банкнот
-	 * @throws NoSuchBoxExists когда нет ячейки с такой банкнотой
+	 * @throws NoSuchBoxExistsException когда нет ячейки с такой банкнотой
 	 */
-	void putMoney(Banknote banknote, int count) throws NoSuchBoxExists;
+	void putMoney(Banknote banknote, int count) throws NoSuchBoxExistsException;
 	
 	/**
 	 * Получить сумму денег
 	 * 
 	 * @param sum требуемая сумма 
 	 * @return банкноты и их количества
-	 * @throws UnsufficientMoney когда недостаточно денег
+	 * @throws UnsufficientMoneyException когда недостаточно денег
 	 */
-	Map<Banknote, Integer> getMoney(int sum) throws UnsufficientMoney;
+	Map<Banknote, Integer> getMoney(int sum) throws UnsufficientMoneyException;
 	
 	/**
 	 * Получить баланс

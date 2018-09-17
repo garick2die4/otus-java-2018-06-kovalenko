@@ -19,9 +19,9 @@ public interface IAtmBox
 	 * Извлечь деньги из ячейки
 	 *  
 	 * @param count Количество банкнот
-	 * @throws UnsufficientBanknoteCount
+	 * @throws UnsufficientBanknoteCountException
 	 */
-	void get(int count) throws UnsufficientBanknoteCount;
+	void get(int count) throws UnsufficientBanknoteCountException;
 	
 	/**
 	 * Пополнить ячейку

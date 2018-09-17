@@ -2,7 +2,7 @@ package atm.impl;
 
 import atm.core.Banknote;
 import atm.core.IAtmBox;
-import atm.core.UnsufficientBanknoteCount;
+import atm.core.UnsufficientBanknoteCountException;
 
 public class AtmBox implements IAtmBox
 {
@@ -34,10 +34,10 @@ public class AtmBox implements IAtmBox
 	}
 
 	@Override
-	public void get(int count) throws UnsufficientBanknoteCount
+	public void get(int count) throws UnsufficientBanknoteCountException
 	{
 		if (this.count - count < 0)
-			throw new UnsufficientBanknoteCount();
+			throw new UnsufficientBanknoteCountException(banknote);
 		this.count -= count;
 	}
 
