@@ -1,5 +1,6 @@
 package atm.impl;
 
+import atm.core.AtmBoxMemento;
 import atm.core.AtmCreationParam;
 import atm.core.Banknote;
 import atm.core.IAtmBox;
@@ -9,12 +10,10 @@ public class AtmBox implements IAtmBox
 {
 	private final Banknote banknote;
 	private int count;
-	private final int capacity;
 	
 	public AtmBox(AtmCreationParam param)
 	{
 		this.banknote = param.banknote();
-		this.capacity = param.capacity();
 		this.count = param.count();
 	}
 
@@ -30,11 +29,6 @@ public class AtmBox implements IAtmBox
 		return count;
 	}
 
-	@Override
-	public int capacity()
-	{
-		return capacity;
-	}
 	
 	@Override
 	public void get(int count) throws UnsufficientBanknoteCountException
@@ -45,9 +39,15 @@ public class AtmBox implements IAtmBox
 	}
 
 	@Override
-	public void refill()
+	public AtmBoxMemento save()
 	{
-		count = capacity;
+		return new AtmBoxMemento(count);
+	}
+	
+	@Override
+	public void load(AtmBoxMemento state)
+	{
+		count = state.getState();
 	}
 
 }

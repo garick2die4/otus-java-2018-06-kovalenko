@@ -5,7 +5,6 @@ import java.util.Map;
 /**
  * Банкомат 
  */
-// TODO add ID
 public interface IAtm
 {
 	/**

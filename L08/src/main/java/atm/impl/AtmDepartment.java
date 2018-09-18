@@ -1,32 +1,50 @@
 package atm.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import atm.core.Banknote;
 import atm.core.IAtm;
 import atm.core.IAtmDepartment;
+import atm.core.NoSuchBoxExistsException;
 
 public class AtmDepartment implements IAtmDepartment
 {
-	private final List<IAtm> atms = new ArrayList<>();
+	private final List<IAtm> atms;
 	
 	public AtmDepartment(List<IAtm> atms)
 	{
-		Collections.copy(this.atms, atms);
+		this.atms = atms;
 	}
 
 	@Override
 	public int getBalance()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		int sum = 0;
+		for (IAtm atm : atms)
+		{
+			Map<Banknote, Integer> balance = atm.getBalance();
+			for (Map.Entry<Banknote, Integer> entry : balance.entrySet())
+				sum += entry.getKey().nominal() * entry.getValue();
+		}
+		return sum;
 	}
 
 	@Override
 	public void refill()
 	{
-		// TODO Auto-generated method stub
-		
+		try
+		{
+			for (IAtm atm : atms)
+			{
+				Map<Banknote, Integer> balance = atm.getBalance();
+				
+				for (Map.Entry<Banknote, Integer> entry : balance.entrySet())
+					atm.refill(entry.getKey());
+			}
+		}
+		catch (NoSuchBoxExistsException e)
+		{
+		}
 	}
 }

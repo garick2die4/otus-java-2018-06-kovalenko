@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import atm.core.AtmBoxMemento;
 import atm.core.Banknote;
 import atm.core.IAtm;
 import atm.core.IAtmBox;
@@ -14,12 +15,14 @@ import atm.core.UnsufficientMoneyException;
 public final class Atm implements IAtm
 {
 	private Map<Banknote, IAtmBox> boxes = new HashMap<>();
-			
+	private Map<Banknote, AtmBoxMemento> boxStates = new HashMap<>();
+	
 	public Atm(List<IAtmBox> boxes)
 	{
 		for (IAtmBox box : boxes)
 		{
-			this.boxes.put(box.banknote(), box);	
+			this.boxes.put(box.banknote(), box);
+			this.boxStates.put(box.banknote(), box.save());
 		}
 	}
 	
@@ -30,7 +33,7 @@ public final class Atm implements IAtm
 			throw new NoSuchBoxExistsException(banknote);
 
 		IAtmBox box = boxes.get(banknote);
-		box.refill();
+		box.load(boxStates.get(banknote));
 	}
 
 	@Override
@@ -90,7 +93,6 @@ public final class Atm implements IAtm
 	public Map<Banknote, Integer> getBalance()
 	{
 		Map<Banknote, Integer> balance = new HashMap<>();
-		// TODO lambda
 		for (Map.Entry<Banknote, IAtmBox> entry : boxes.entrySet())
 		{
 			balance.put(entry.getKey(), entry.getValue().currrentBanknoteCount());
@@ -106,7 +108,6 @@ public final class Atm implements IAtm
 	private int totalBalance()
 	{
 		Map<Banknote, Integer> banknotesBalance = getBalance();
-		// TODO lambda
 		int sum = 0;
 		for (Map.Entry<Banknote, Integer> b : banknotesBalance.entrySet())
 		{

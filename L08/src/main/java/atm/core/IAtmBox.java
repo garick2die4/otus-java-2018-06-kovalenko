@@ -14,11 +14,6 @@ public interface IAtmBox
 	 * количество банкнот
 	 */
 	int currrentBanknoteCount();
-	
-	/**
-	 * вместимость 
-	 */
-	int capacity();
 
 	/**
 	 * Извлечь деньги из ячейки
@@ -28,9 +23,7 @@ public interface IAtmBox
 	 */
 	void get(int count) throws UnsufficientBanknoteCountException;
 	
-	/**
-	 * Пополнить ячейку
-	 * @param count
-	 */
-	void refill();
+	AtmBoxMemento save();
+	
+	void load(AtmBoxMemento state);
 }
