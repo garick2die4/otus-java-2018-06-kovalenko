@@ -1,5 +1,6 @@
 package atm.core;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -7,6 +8,11 @@ import java.util.Map;
  */
 public interface IAtm
 {
+	/**
+	 * Получить банкноты, которые находятся в банкомате
+	 */
+	List<Banknote> getBanknotes();
+	
 	/**
 	 * Положить деньги в банкомат
 	 * 
@@ -30,4 +36,9 @@ public interface IAtm
 	 * @return банкноты и их количества
 	 */
 	Map<Banknote, Integer> getBalance();
+	
+	/**
+	 * Получить общий баланс 
+	 */
+	int getTotalBalance();
 }

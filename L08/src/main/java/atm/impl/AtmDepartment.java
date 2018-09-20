@@ -1,7 +1,6 @@
 package atm.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import atm.core.Banknote;
 import atm.core.IAtm;
@@ -23,28 +22,20 @@ public class AtmDepartment implements IAtmDepartment
 		int sum = 0;
 		for (IAtm atm : atms)
 		{
-			Map<Banknote, Integer> balance = atm.getBalance();
-			for (Map.Entry<Banknote, Integer> entry : balance.entrySet())
-				sum += entry.getKey().nominal() * entry.getValue();
+			sum += atm.getTotalBalance();
 		}
 		return sum;
 	}
 
 	@Override
-	public void refill()
+	public void refill() throws NoSuchBoxExistsException
 	{
-		try
+		for (IAtm atm : atms)
 		{
-			for (IAtm atm : atms)
-			{
-				Map<Banknote, Integer> balance = atm.getBalance();
-				
-				for (Map.Entry<Banknote, Integer> entry : balance.entrySet())
-					atm.refill(entry.getKey());
-			}
-		}
-		catch (NoSuchBoxExistsException e)
-		{
-		}
+			List<Banknote> banknotes = atm.getBanknotes(); 
+
+			for (Banknote banknote : banknotes)
+				atm.refill(banknote);
+		}		
 	}
 }

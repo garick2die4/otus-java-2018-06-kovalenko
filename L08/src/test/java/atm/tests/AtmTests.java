@@ -1,5 +1,6 @@
 package atm.tests;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -37,6 +38,28 @@ public class AtmTests
 		Assert.assertEquals(0, (int)balance.get(Banknote.TEN));
 		Assert.assertEquals(0, (int)balance.get(Banknote.FIFTY));
 		Assert.assertEquals(0, (int) balance.get(Banknote.HUNDRED));
+		Assert.assertEquals(0, atm.getTotalBalance());
+	}
+	
+	/**
+	 * Проверка получения банкнот
+	 */
+	@Test
+	public void test_get_banknotes() throws Exception
+	{
+		// Prepare
+		AtmCreationParam[] params = {
+			new AtmCreationParam(Banknote.ONE, 1),
+			new AtmCreationParam(Banknote.HUNDRED, 5),
+			new AtmCreationParam(Banknote.FIFTY, 4),
+			new AtmCreationParam(Banknote.FIVE, 2)
+		};
+		IAtm atm = new AtmFactory().create(params);
+
+		List<Banknote> banknotes = atm.getBanknotes();
+		Banknote[] expected = {Banknote.ONE, Banknote.FIVE, Banknote.FIFTY, Banknote.HUNDRED};
+		Assert.assertArrayEquals(expected, banknotes.toArray());
+		
 	}
 	
 	/**
@@ -70,6 +93,7 @@ public class AtmTests
 		Assert.assertEquals(3, (int)balance.get(Banknote.TEN));
 		Assert.assertEquals(4, (int)balance.get(Banknote.FIFTY));
 		Assert.assertEquals(5, (int) balance.get(Banknote.HUNDRED));
+		Assert.assertEquals(741, atm.getTotalBalance());
 	}
 
 	/**

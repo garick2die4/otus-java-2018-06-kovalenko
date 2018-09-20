@@ -1,5 +1,6 @@
 package atm.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,14 @@ public final class Atm implements IAtm
 			this.boxes.put(box.banknote(), box);
 			this.boxStates.put(box.banknote(), box.save());
 		}
+	}
+	
+	@Override
+	public List<Banknote> getBanknotes()
+	{
+		List<Banknote> banknotes = new ArrayList<>(boxes.keySet());
+		banknotes.sort((x,y) -> x.compareTo(y));
+		return banknotes;
 	}
 	
 	@Override
@@ -100,6 +109,17 @@ public final class Atm implements IAtm
 		return balance;
 	}
 
+	@Override
+	public int getTotalBalance()
+	{
+		int sum = 0;
+		for (Map.Entry<Banknote, IAtmBox> entry : boxes.entrySet())
+		{
+			sum += entry.getKey().nominal() * entry.getValue().currrentBanknoteCount();
+		}
+		return sum;
+	}
+	
 	private boolean hasBoxWithBanknotes(Banknote banknote)
 	{
 		return boxes.containsKey(banknote) && boxes.get(banknote).currrentBanknoteCount() > 0;

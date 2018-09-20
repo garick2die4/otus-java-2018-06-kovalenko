@@ -13,5 +13,5 @@ public interface IAtmDepartment
 	/**
 	 * Заполнить заново все банкоматы отделения
 	 */
-	void refill();
+	void refill() throws NoSuchBoxExistsException;
 }
