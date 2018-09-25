@@ -8,10 +8,10 @@ public class Main
 {
     public static void main(String... args) throws InterruptedException, IllegalArgumentException, IllegalAccessException
     {
-    	TestSerialize o1 = new TestSerialize("asdasd", "sdfsdfs");
-    	StringBuilder stringBuilder = new StringBuilder();
-    	ClassReader.save(stringBuilder, o1);
-    	String s = stringBuilder.toString();
+    	TestSerialize o1 = new TestSerialize("aaa", "bbb");
+    	TestSerialize2 o2 = new TestSerialize2("ccc", 100, o1);
+    	String s = ClassReader.save(o2);
+    	System.out.println(s);
     }
     
 
