@@ -4,9 +4,6 @@ import java.lang.System;
 import java.util.List;
 
 import my.orm.JsonObjectSerializer;
-import ru.otus.base.DBService;
-import ru.otus.base.UsersDataSet;
-import serialization.internal.SerializationErrorException;
 
 public class Main
 {
@@ -17,7 +14,7 @@ public class Main
             
             dbService.prepareTables();
             
-            dbService.addUsers("tully", "sully");
+            dbService.addUser("tully", "sully");
             
             int id = 1;
             System.out.println(String.format("UserName with id = %d : %s", id, dbService.getUserName(id)));
