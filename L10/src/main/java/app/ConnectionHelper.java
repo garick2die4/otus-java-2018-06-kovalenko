@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 class ConnectionHelper
 {
-    static Connection getConnection()
+    static Connection getConnection(String dbName, String userName, String password)
     {
         try
         {
@@ -18,9 +18,11 @@ class ConnectionHelper
             String url = "jdbc:mysql://" +       //db type
                     "localhost:" +               //host name
                     "3306/" +                    //port
-                    "dbexample?" +               //db name
-                    "user=tully&" +              //login
-                    "password=tully&" +          //password
+                    dbName + "?" +               //db name
+                    "user=" + userName + "&" +              //login
+                    "password=" + password + "&" +          //password
+                    "allowPublicKeyRetrieval=true&" +
+                    "serverTimezone=UTC&" +
                     "useSSL=false";              //do not use Secure Sockets Layer
 
 

@@ -1,37 +1,41 @@
 package app;
 
 import java.lang.System;
-import java.util.List;
 
-import my.orm.JsonObjectSerializer;
+import my.orm.IDBService;
 
 public class Main
 {
-    public static void main(String... args) throws InterruptedException, IllegalArgumentException, IllegalAccessException
+    public static void main(String... args) throws Exception
     {
-        try (DBService dbService = getDbService()) {
+        try (IDBService<UserDataSet> dbService = getDbService("dbexample", "2die4", "12345"))
+        {
             System.out.println(dbService.getMetaData());
             
             dbService.prepareTables();
             
-            dbService.addUser("tully", "sully");
+            dbService.save(new UserDataSet("Vasya", (short)30));
             
-            int id = 1;
-            System.out.println(String.format("UserName with id = %d : %s", id, dbService.getUserName(id)));
+            dbService.save(new UserDataSet("Petya", (short)41));
             
-            List<String> names = dbService.getAllNames();
-            System.out.println("All names: " + names.toString());
+            UserDataSet user1 = dbService.load(1);
+            System.out.println(String.format("User: id = %d, name = %s, age = %d",
+        		user1.getId(),
+        		user1.getName(),
+        		user1.getAge()));
             
-            List<UsersDataSet> users = dbService.getAllUsers();
+            UserDataSet user2 = dbService.load(2);
+            System.out.println(String.format("User: id = %d, name = %s, age = %d",
+        		user2.getId(),
+        		user2.getName(),
+        		user2.getAge()));
             
-            System.out.println("All users: " + users.toString());
-            dbService.deleteTables();
+            dbService.deleteTable();
         }
-
     }
 
-    private static DBService getDbService()
+    private static IDBService<UserDataSet> getDbService(String dbName, String userName, String password)
     {
-    	return new DBService();
+    	return new DBService<>(ConnectionHelper.getConnection(dbName, userName, password), UserDataSet.class);
     }
 }
