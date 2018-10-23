@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add new user</title>
+
+    <script type='text/javascript'>
+        function addField()
+        {
+            var container = document.getElementById("phones_container");
+            var lastId = "phone" + (container.childNodes.length + 1)
+            var phonediv = document.createElement("div")
+            phonediv.id = lastId
+
+            var p = document.createElement("p")
+            p.appendChild(document.createTextNode("Phone: "))
+
+            var input = document.createElement("input")
+            input.setAttribute("type", "tel")
+            input.setAttribute("name", lastId)
+            p.appendChild(input)
+
+            phonediv.appendChild(p);
+
+            container.appendChild(phonediv);
+
+            var count = document.getElementById("phones_count");
+            if (count === null)
+            {
+                count = document.createElement("input")
+                count.setAttribute("type", "hidden")
+                count.setAttribute("name", "phones_count")
+                count.setAttribute("id", "phones_count")
+                var misc_elem = document.getElementById("phones_info_misc");
+                misc_elem.appendChild(count);
+            }
+            count.setAttribute("value", container.childNodes.length)
+        }
+        window.onload = addField 
+    </script>
+</head>
+<body>
+<div class="top">
+    <a href="index.html">Main</a>
+</div>
+<div class="add">
+    <form action="/add" method="POST">
+        <p>Name: <input type="text" name="name"/></p>
+        <p>Age: <input type="number" name="age"/></p>
+        <p>Address: <input type="text" name="address"/></p>
+        <div id="phones_info">
+            <div id="phones_container"></div>
+            <div id="phones_info_misc">
+            <input type="button" value="Add phone" onclick="addField()"/>
+            <p><input type="submit" value="Add user"/>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
