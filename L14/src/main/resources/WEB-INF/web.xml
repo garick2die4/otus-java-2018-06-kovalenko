@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app>
+
+    <display-name>L14</display-name>
+    <description>Spring and webserver</description>
+
+    <servlet>
+        <servlet-name>getUserServlet</servlet-name>
+        <servlet-class>my.orm.servlet.GetUserServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>getTotalUsersServlet</servlet-name>
+        <servlet-class>my.orm.servlet.GetTotalUsersServlet</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>addUserServlet</servlet-name>
+        <servlet-class>my.orm.servlet.AddUserServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>getTotalUsersServlet</servlet-name>
+        <url-pattern>/count</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>addUserServlet</servlet-name>
+        <url-pattern>/add</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>getUserServlet</servlet-name>
+        <url-pattern>/user</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>

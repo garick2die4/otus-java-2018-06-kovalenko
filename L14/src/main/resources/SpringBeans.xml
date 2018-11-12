@@ -1,0 +1,12 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="dbService" class="my.orm.hiber.HibernateDBService">
+        <constructor-arg name="dbName" value="dbexample"/>
+        <constructor-arg name="userName" value="2die4"/>
+        <constructor-arg name="password" value="12345"/>
+    </bean>
+
+</beans>
