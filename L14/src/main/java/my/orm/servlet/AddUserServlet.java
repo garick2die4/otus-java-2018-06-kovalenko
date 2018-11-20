@@ -6,19 +6,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import my.orm.datasets.PhoneDataSet;
 import my.orm.datasets.UserDataSet;
 import my.orm.dbservice.DBServiceException;
 import my.orm.dbservice.IDBService;
 
+@Configurable
 public class AddUserServlet extends HttpServlet
 {
 	private static final long serialVersionUID = -3249528806162203681L;
@@ -35,15 +38,15 @@ public class AddUserServlet extends HttpServlet
 	
 	private static TemplateProcessor templateProcessor = new TemplateProcessor();
 	
+	@Autowired
 	private IDBService dbService;
 	
-    public void init()
+    public void init(ServletConfig config) throws ServletException
     {
-        //TODO: Create one context for the application. Inject beans.
-        ApplicationContext context = new ClassPathXmlApplicationContext("SpringBeans.xml");
-        dbService = (IDBService) context.getBean("dbService");
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
- 
+
     public void doPost(HttpServletRequest request, HttpServletResponse response)
         	throws ServletException, IOException
     {

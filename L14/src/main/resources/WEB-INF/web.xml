@@ -5,6 +5,15 @@
     <display-name>L14</display-name>
     <description>Spring and webserver</description>
 
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:SpringBeans.xml</param-value>
+    </context-param>
+    
     <servlet>
         <servlet-name>getUserServlet</servlet-name>
         <servlet-class>my.orm.servlet.GetUserServlet</servlet-class>
