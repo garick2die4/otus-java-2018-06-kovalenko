@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<web-app>
+
+    <display-name>L14</display-name>
+    <description>Spring and webserver</description>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:SpringBeans.xml</param-value>
+    </context-param>
+    
+    <servlet>
+        <servlet-name>webSocketServlet</servlet-name>
+        <servlet-class>my.orm.servlet.UsersDBWebSocketServlet</servlet-class>
+    </servlet>
+
+
+    <servlet-mapping>
+        <servlet-name>webSocketServlet</servlet-name>
+        <url-pattern>/sock</url-pattern>
+    </servlet-mapping>
+    
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>

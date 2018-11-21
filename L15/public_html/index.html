@@ -1,0 +1,56 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml" content="text/html;">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Jetty WebSocket: Users DB</title>
+    <script src="js/wsusers.js" type="text/javascript"></script>
+</head>
+<body onload="init();">
+<div id="body">
+	<div class="commands">
+	<table border="1" width="600">
+		<tr>
+			<td width="30%" valign="top" align="right">Show user count</td>
+			<td>
+	            <form>
+	                <input type="button" value="Send" onclick="sendGetTotalCount();"/>
+	            </form>
+            </td>
+		</tr>
+		<tr>
+			<td valign="top" align="right">Show user with id</td>
+			<td>
+	            <form>
+			     	<input type="text" id="userId"><input type="button" value="Send" onclick="sendGetUserId();"/>
+            	</form>
+           	</td>
+		</tr>
+		<tr>
+			<td valign="top" align="right">Add user</td>
+			<td>
+			    <form>
+			        <p>Name: <input type="text" id="userName"/></p>
+			        <p>Age: <input type="number" id="userAge"/></p>
+			        <p>Address: <input type="text" id="userAddress"/></p>
+			        <div id="phones_info">
+			            <div id="phones_container"></div>
+			            <div id="phones_info_misc">
+			           		<input type="button" value="Add phone" onclick="addField()"/>
+			            	<p><input type="button" value="Add" onclick="addUser();"/>
+			            </div>
+			        </div>
+			    </form>
+		    </td>
+	    </tr>
+	</table>
+    </div>
+    <div id="info">
+    	<table border="1" width="600">
+    		<tr>
+    			<td width="30%" valign="top" align="right">Results</td>
+	    		<td><textarea id="messages" rows="16" cols="48" readonly="readonly"></textarea></td>
+	    	</tr>
+    	</table>
+	</div>    	
+</div>
+</body>
+</html>
